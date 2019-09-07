@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Control2
 {
-    class BaseClass
+    abstract class  BaseClass
     {
         public string Size { get; set; }
         public string Name { get; set; }
@@ -71,6 +71,8 @@ namespace Control2
                 base.Parse(input);
                 string[] inputSP = input.Split(';');
                 Length = inputSP[2];
+                var extMkv = input.Split('.','(');
+                Extension = extMkv[2];
             }
             public override void Print()
             {
@@ -89,10 +91,10 @@ namespace Control2
             Text:data1.txt(7B); Yet another string
             Movie:logan.2017.mkv(19GB); 1920x1080; 2h12m";
                 ;
-                
-                List<OutputText> outputTexts = new List<OutputText>();
-                List<OutputImages> outputImages = new List<OutputImages>();
-                List<OutputMovies> outputMovies = new List<OutputMovies>();
+                List<BaseClass> result = new List<BaseClass>();
+                //List<OutputText> outputTexts = new List<OutputText>(); я хз короче как правильней нужно было бы сделать 
+                //List<OutputImages> outputImages = new List<OutputImages>(); по этому я все в 1 Лист запихнул вместо 3х
+                //List<OutputMovies> outputMovies = new List<OutputMovies>(); Но из-за этого порядок вывода изменился
                 string[] files = a.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
 
                 for (int i = 0; i < files.Length; i++)
@@ -104,33 +106,26 @@ namespace Control2
                         case "text":
                             OutputText text = new OutputText();
                             text.Parse(split[1]);
-                            outputTexts.Add(text);
+                            result.Add(text);
                             break;
                         case "image":
                             OutputImages image = new OutputImages();
                             image.Parse(split[1]);
-                            outputImages.Add(image);
+                            result.Add(image);
                             break;
                         case "movie":
                             OutputMovies movies = new OutputMovies();
                             movies.Parse(split[1]);
-                            outputMovies.Add(movies);
+                            result.Add(movies);
                             break;
                     }
                 }
                 
-                foreach(var p in outputTexts)
+                foreach(var p in result)
                 {
                     p.Print();
                 }
-                foreach (var p in outputImages)
-                {
-                    p.Print();
-                }
-                foreach (var p in outputMovies)
-                {
-                    p.Print();
-                }
+               
 
                 Console.ReadLine();
             }
